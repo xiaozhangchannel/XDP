@@ -1,0 +1,47 @@
+name: net_manager
+
+on:
+  push:
+    branches:
+      - "*"
+    paths:
+      - 'space_mac/**'
+      - '.github/workflows/net_manager.yml'
+  pull_request:
+    branches:
+      - "*"
+    paths:
+      - 'space_mac/**'
+      - '.github/workflows/net_manager.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install dependencies and Init Env
+        run: |
+          sudo apt update
+          sudo apt install clang llvm libelf-dev libpcap-dev build-essential linux-headers-$(uname -r) linux-tools-common linux-tools-generic libc6-dev-i386 libxdp-dev xdp-tools
+          git submodule update --init --recursive
+
+      - name: Configure
+        run: ./configure
+        
+      - name: make
+        run: make
+       
+      - name: Build and Run
+        run: |
+          cd space_mac/xacl_core/
+          # run
+          sudo ./xdp_loader -d docker0 --progname xdp_redirect_func -S
+          sudo ./xacladm load docker0 ./conf.d/mac_load.conf
+          sudo ./xdp_stats -d docker0
