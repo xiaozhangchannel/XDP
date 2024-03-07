@@ -1,9 +1,0 @@
-[submodule "space_mac/lin/xdp-tools"]
-	path = space_mac/lin/xdp-tools
-	url = https://github.com/xdp-project/xdp-tools.git
-[submodule "space_mac/lib/xdp-tools"]
-	path = space_mac/lib/xdp-tools
-	url = https://github.com/xdp-project/xdp-tools.git
-[submodule "space_mac/lib/libbpf"]
-	path = space_mac/lib/libbpf
-	url = https://github.com/libbpf/libbpf.git
